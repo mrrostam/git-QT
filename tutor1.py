@@ -18,8 +18,14 @@ class QuitBtn(QtWidgets.QPushButton):
         self.clicked.connect(QtWidgets.qApp.quit)
         self.setToolTip("exit!")
 
+class QuitMessage(QtWidgets.QMessageBox):
+    def __init__(self):
+        super().__init__()
+        self.setText("Do you really want to quit?")
+        self.addButton(self.No)
+        self.addButton(self.Yes)
 
-class MyWindow(QtWidgets.QWidget):
+class MyWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setup()
@@ -31,6 +37,14 @@ class MyWindow(QtWidgets.QWidget):
         self.new_button = StartNewGameBtn(self)
         self.quit_button = QuitBtn(self)
         self.show()
+
+    def closeEvent(self, event):
+        reply = QuitMessage().exec_()
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
 
 
 if __name__ == "__main__":
